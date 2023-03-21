@@ -1,15 +1,21 @@
-import { useState, useRef, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Title from './components/title';
-import Board from './components/board';
-import './style/page.css';
-import './style/reset-button.css';
-import '../six-letter-word.json';
-import NormalGame from './normal';
+import Game from './game';
+import HomePage from './components/homepage';
+import Navbar from './components/Navbar';
 
 
 function App() {
-  return <div>{NormalGame}</div>;
+  return (
+    <div>
+    <Navbar/>
+    <Routes>
+      <Route path = "/" element = {<HomePage/>}/>
+      <Route path = "/game/normal" element={<Game difficulty={"normal"}/>} />
+      <Route path = "/game/hard" element={<Game difficulty={"hard"}/>} />
+    </Routes>
+    </div>
+  )
 }
 
-export default App
+export default App;

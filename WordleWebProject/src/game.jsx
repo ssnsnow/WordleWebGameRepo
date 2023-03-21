@@ -4,14 +4,25 @@ import Board from './components/board';
 import './style/page.css';
 import './style/reset-button.css';
 import '../six-letter-word.json';
+import '../seven-letter-word.json';
 
-
-function NormalGame() {
-  const wordSize = 6;
-  const attempts = 6;
+function Game({difficulty}) {
+  let attempts;
+  let wordSize;
+  let fileName;
+  if (difficulty === "normal") {
+    attempts = 6;
+    wordSize = 6;
+    fileName = '../six-letter-word.json'
+  } else {
+    attempts = 5;
+    wordSize = 7;
+    fileName = '../seven-letter-word.json'
+  }
+  
   const [board, setBoard] = useState(createBoard(attempts, wordSize));
   const [errorMessage, setErrorMessage] = useState('');
-  const [attemptMessage, setAttemptMessage] = useState("You have 6 attempts remaining!");
+  const [attemptMessage, setAttemptMessage] = useState(`You have ${attempts} attempts remaining!`);
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
   const [randomWord, setRandomWord] = useState('');
@@ -24,7 +35,7 @@ function NormalGame() {
 
   useEffect(() => {
     async function fetchWords() {
-      const response = await fetch('../six-letter-word.json');
+      const response = await fetch(fileName);
       const words = await response.json();
       const randomIndex = Math.floor(Math.random() * words.length);
       const randomWord = words[randomIndex];
@@ -43,10 +54,10 @@ function NormalGame() {
         setCurrCol(currCol + 1);
       }
     } else if (event.keyCode === 13) {
-      let remainingAttempts = wordSize - currRow - 1;
+      let remainingAttempts = attempts - currRow - 1;
       setAttemptMessage(`You have ${remainingAttempts} attempts remaining!`);
       if (currCol < wordSize) {
-        setErrorMessage("Please enter a word with at least 6 letters!");
+        setErrorMessage(`Please enter a word with at least ${wordSize} letters!`);
         return;
       }
       if (currCol === wordSize) {
@@ -64,7 +75,7 @@ function NormalGame() {
           return;
         } else {
           if (remainingAttempts === 0) {
-            setAttemptMessage("You have used up your 6 tries. End!");
+            setAttemptMessage(`You have used up your ${attempts} tries. End!`);
             return;
           }
           let charIdx = 0;
@@ -75,12 +86,9 @@ function NormalGame() {
           console.log(freq);
           let newBoard = [...board];
           while (charIdx < wordSize) {
-            console.log(randomWord);
-            console.log(newBoard);
             if (randomWord[charIdx] === input[charIdx]) {
               newBoard[currRow][charIdx].state = 1;
               freq[randomWord[charIdx]]--;
-              console.log(newBoard);
             }
             charIdx++;
           }
@@ -95,7 +103,6 @@ function NormalGame() {
             }
             charIdx++;
           }
-          console.log(newBoard);
           setBoard(newBoard);
           setCurrRow(currRow + 1);
           setCurrCol(0);
@@ -130,7 +137,7 @@ function NormalGame() {
   function handleResetClick() {
     setBoard(createBoard(attempts, wordSize));
     setErrorMessage(" ");
-    setAttemptMessage("You have 6 attempts remaining!");
+    setAttemptMessage(`You have ${attempts} attempts remaining!`);
     setCurrRow(0);
     setCurrCol(0);
   }
@@ -139,6 +146,9 @@ function NormalGame() {
     <div>
       <div className="no-focus" ref={myRef} tabIndex={0} onKeyDown={handleKeyDown}>
         <Title />
+        <div>
+          {difficulty}
+        </div>
         <Board matrix={board}/>
         {attemptMessage && <p className="error">{attemptMessage}</p >}
         {errorMessage && <p className="error">{errorMessage}</p >}
@@ -149,4 +159,4 @@ function NormalGame() {
   );
 }
 
-export default NormalGame
+export default Game

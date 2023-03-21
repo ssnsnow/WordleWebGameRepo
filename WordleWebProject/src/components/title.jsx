@@ -3,7 +3,7 @@ import '../style/title.css'
 
 function Title() {
   return (
-    <div className="wordleTitle">Wordle</div>
+    <nav className="wordleTitle">Wordle</nav>
   )
 }
 
