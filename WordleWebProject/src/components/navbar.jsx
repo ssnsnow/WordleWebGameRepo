@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router'
 import Game from '../game'
 
+
 export default function () {
   const navigate = useNavigate();
   function handleHomeClick(){
@@ -16,11 +17,18 @@ export default function () {
     navigate("/game/hard", { state: { myData: <Game difficulty={"hard"}/> } })
   };
 
+  function handleRulesClick(){
+    navigate("/Instruction")
+  };
+
   return (
-    <div className = "navBar">
-        <button onClick={handleHomeClick}>Home</button>
-        <button onClick={handleNormalClick}>Normal</button>
-        <button onClick={handleHardClick}>Hard</button>
+    <div className="centered">
+      <div className = "navBar">
+        <button className="my-button" onClick={handleHomeClick}>Home</button>
+        <button className="my-button" onClick={handleNormalClick}>Normal</button>
+        <button className="my-button" onClick={handleHardClick}>Hard</button>
+        <button className="my-button" onClick={handleRulesClick}>How To Play</button>
+      </div>
     </div>
   )
 }

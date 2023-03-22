@@ -1,15 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect,createContext} from 'react';
 import Title from './components/title'
 import Board from './components/board';
 import './style/page.css';
 import './style/reset-button.css';
 import '../six-letter-word.json';
 import '../seven-letter-word.json';
+import './style/message.css';
+
+export const ColorContext = createContext(null);
 
 function Game({difficulty}) {
+
   let attempts;
   let wordSize;
   let fileName;
+
   if (difficulty === "normal") {
     attempts = 6;
     wordSize = 6;
@@ -22,6 +27,7 @@ function Game({difficulty}) {
   
   const [board, setBoard] = useState(createBoard(attempts, wordSize));
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [attemptMessage, setAttemptMessage] = useState(`You have ${attempts} attempts remaining!`);
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
@@ -39,13 +45,15 @@ function Game({difficulty}) {
       const words = await response.json();
       const randomIndex = Math.floor(Math.random() * words.length);
       const randomWord = words[randomIndex];
-      setRandomWord(randomWord);
+      setRandomWord(randomWord.toUpperCase());
     }
     fetchWords();
   }, []);
 
   function handleKeyDown(event) {
+    setErrorMessage(" ");
     const letterKeys = /^[A-Za-z]$/;
+
     if(event.key.match(letterKeys)){
       if (currRow < attempts && currCol < wordSize) {
         let newBoard = [...board];
@@ -54,12 +62,12 @@ function Game({difficulty}) {
         setCurrCol(currCol + 1);
       }
     } else if (event.keyCode === 13) {
-      let remainingAttempts = attempts - currRow - 1;
-      setAttemptMessage(`You have ${remainingAttempts} attempts remaining!`);
       if (currCol < wordSize) {
         setErrorMessage(`Please enter a word with at least ${wordSize} letters!`);
         return;
       }
+      let remainingAttempts = attempts - currRow - 1;
+      setAttemptMessage(`You have ${remainingAttempts} attempts remaining!`);
       if (currCol === wordSize) {
         let input = toWord(board[currRow]);
         if (compare(randomWord, input)) {
@@ -71,24 +79,22 @@ function Game({difficulty}) {
           }
           setBoard(newBoard);
           setAttemptMessage(" ");
-          setErrorMessage("Congratulations!  Would you like to try again?");
+          setSuccessMessage("Congratulations!  Would you like to try again?");
+          setErrorMessage(" ")
           return;
         } else {
-          if (remainingAttempts === 0) {
-            setAttemptMessage(`You have used up your ${attempts} tries. End!`);
-            return;
-          }
           let charIdx = 0;
           const freq = {};
           for (let c of randomWord) {
             freq[c] = freq[c] ? freq[c] + 1 : 1;
           }
-          console.log(freq);
           let newBoard = [...board];
           while (charIdx < wordSize) {
             if (randomWord[charIdx] === input[charIdx]) {
               newBoard[currRow][charIdx].state = 1;
               freq[randomWord[charIdx]]--;
+            } else {
+              newBoard[currRow][charIdx].state = 3;
             }
             charIdx++;
           }
@@ -104,12 +110,24 @@ function Game({difficulty}) {
             charIdx++;
           }
           setBoard(newBoard);
+          if (remainingAttempts === 0) {
+            setAttemptMessage(`You lose! Answer is ${randomWord}!`);
+            setErrorMessage(" ");
+            return;
+          }
           setCurrRow(currRow + 1);
           setCurrCol(0);
+          
         }
       }
+    } else if (event.keyCode === 8) {
+      let newBoard = [...board];
+      let tempCol = currCol - 1;
+      newBoard[currRow][tempCol].char = " ";
+      setBoard(newBoard);
+      setCurrCol(tempCol);
+      return;
     }
-    setErrorMessage(" ");
   }
 
   function toWord(list) {
@@ -137,21 +155,30 @@ function Game({difficulty}) {
   function handleResetClick() {
     setBoard(createBoard(attempts, wordSize));
     setErrorMessage(" ");
+    setSuccessMessage(" ");
     setAttemptMessage(`You have ${attempts} attempts remaining!`);
     setCurrRow(0);
     setCurrCol(0);
+    window.location.reload(false);
   }
  
   return (
     <div>
       <div className="no-focus" ref={myRef} tabIndex={0} onKeyDown={handleKeyDown}>
         <Title />
-        <div>
+        <div className="difficulty">
           {difficulty}
         </div>
-        <Board matrix={board}/>
-        {attemptMessage && <p className="error">{attemptMessage}</p >}
-        {errorMessage && <p className="error">{errorMessage}</p >}
+        <div className="startMessage">
+          Please enter a {wordSize} long word to start :)
+        </div>
+          {successMessage && <p className="success">{successMessage}</p >}
+          <ColorContext.Provider value="color">
+            <Board matrix={board}/>
+          </ColorContext.Provider>
+          {attemptMessage && <p className="info">{attemptMessage}</p >}
+          {errorMessage && <p className="error">{errorMessage}</p >}
+        
       </div>
       <button onClick={handleResetClick} className="reset-button">Reset</button>
     </div>

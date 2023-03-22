@@ -12,18 +12,6 @@ function Board({matrix}) {
       </div>
     ))
   );
-  // let newList = [...list];
-  // if (list.length < 6) {
-  //   for (let i = 0; i < 6 - list.length; i++) {
-  //     newList.push("");
-  //   }
-  // }
-  // let wordArray = newList.map((item, i) => {
-  //   return (
-  //     <Cell key={i} char={item}/>
-  //   );
-  // });
-
 
   return (
     <div className="wordsMatrix">{getBoard}</div>

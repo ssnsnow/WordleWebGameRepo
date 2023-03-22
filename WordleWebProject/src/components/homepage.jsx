@@ -1,21 +1,15 @@
 import React from 'react'
-import { useNavigate } from 'react-router'
-import Game from '../game'
+import wordleImage from '../image/wordle.jpeg'
 
 export default function HomePage() {
-  const navigate = useNavigate();
-  
-  function handleNormalClick(){
-    navigate("/game/normal", { state: { myData: <Game difficulty={"normal"}/> } })
-  };
-
-  function handleHardClick(){
-    navigate("/game/hard", { state: { myData: <Game difficulty={"hard"}/> } })
-  };
   return (
-    <div>
-        <button onClick={handleNormalClick}>NormalGame</button>
-        <button onClick={handleHardClick}>HardGame</button>
-    </div>
+      <div className="centered">
+      <h1 className="moving-text">
+          <span className="green">Welcome </span>
+          <span className="grey"> To </span>
+          <span className="yellow"> Wordle</span>
+        </h1>
+      < img src={wordleImage} alt="Fill" />
+      </div>
   )
 }
