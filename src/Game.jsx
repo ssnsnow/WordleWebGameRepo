@@ -125,6 +125,7 @@ function Game({difficulty}) {
           }
           setBoard(newBoard);
           if (remainingAttempts === 0) {
+            console.log('randomword:', randomWord);
             setAttemptMessage(`You lose! Answer is ${randomWord}!`);
             setErrorMessage(" ");
             return;
