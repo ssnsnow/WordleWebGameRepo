@@ -41,13 +41,16 @@ function Game({difficulty}) {
 
   useEffect(() => {
     async function fetchWords() {
-      const response = await fetch(fileName, {headers: {
-        "Content-Type": "application/json",
-      },});
-      const words = await response.json();
-      const randomIndex = Math.floor(Math.random() * words.length);
-      const randomWord = words[randomIndex];
-      setRandomWord(randomWord.toUpperCase());
+      try {
+        const response = await fetch(fileName);
+        console.log(response);
+        const words = await response.json();
+        const randomIndex = Math.floor(Math.random() * words.length);
+        const randomWord = words[randomIndex];
+        setRandomWord(randomWord.toUpperCase());
+      } catch(error) {
+        console.error(error);
+      }
     }
     fetchWords();
   }, []);
