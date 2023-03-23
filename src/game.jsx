@@ -3,10 +3,10 @@ import Title from './components/Title'
 import Board from './components/Board';
 import './style/Page.css';
 import './style/ResetButton.css';
-import sixWordsFile from '../src/data/six-letter-word.json';
-import sevenWordsFile from '../src/data/seven-letter-word.json';
+import sixWordsFile from './data/six-letter-word.json';
+import sevenWordsFile from './data/seven-letter-word.json';
 import './style/message.css';
-import data from '../src/data/valid-english-word.json';
+import data from './data/valid-english-word.json';
 
 export const ColorContext = createContext(null);
 

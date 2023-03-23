@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
-import Game from '../Game'
+import Game from '../game'
 
 
 export default function () {
