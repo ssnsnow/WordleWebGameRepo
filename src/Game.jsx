@@ -76,7 +76,6 @@ function Game({difficulty}) {
           return;
         }
         setErrorMessage(" ");
-        console.log("random word", randomWord)
         if (compare(randomWord, input)) {
           let newBoard = [...board];
           let charIdx = 0;
