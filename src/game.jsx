@@ -3,10 +3,10 @@ import Title from './components/Title'
 import Board from './components/Board';
 import './style/Page.css';
 import './style/ResetButton.css';
-import '../six-letter-word.json';
-import '../seven-letter-word.json';
+import sixWordsFile from '../src/data/six-letter-word.json';
+import sevenWordsFile from '../src/data/seven-letter-word.json';
 import './style/message.css';
-import data from '../valid-english-word.json';
+import data from '../src/data/valid-english-word.json';
 
 export const ColorContext = createContext(null);
 
@@ -19,11 +19,11 @@ function Game({difficulty}) {
   if (difficulty === "normal") {
     attempts = 6;
     wordSize = 6;
-    fileName = '../six-letter-word.json'
+    fileName = sixWordsFile
   } else {
     attempts = 5;
     wordSize = 7;
-    fileName = '../seven-letter-word.json'
+    fileName = sevenWordsFile
   }
   
   const [board, setBoard] = useState(createBoard(attempts, wordSize));
