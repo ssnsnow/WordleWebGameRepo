@@ -1,6 +1,6 @@
 import React from 'react'
-import Cell from './cell'
-import '../style/board.css'
+import Cell from './Cell'
+import '../style/Board.css'
 
 function Board({matrix}) {
   let getBoard = (

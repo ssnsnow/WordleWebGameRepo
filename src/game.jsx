@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect,createContext} from 'react';
-import Title from './components/title'
-import Board from './components/board';
-import './style/page.css';
-import './style/reset-button.css';
+import Title from './components/Title'
+import Board from './components/Board';
+import './style/Page.css';
+import './style/ResetButton.css';
 import '../six-letter-word.json';
 import '../seven-letter-word.json';
 import './style/message.css';
+import data from '../valid-english-word.json';
 
 export const ColorContext = createContext(null);
 
@@ -32,6 +33,7 @@ function Game({difficulty}) {
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
   const [randomWord, setRandomWord] = useState('');
+  const keys = Object.keys(data);
 
   const myRef = useRef(null);
 
@@ -49,6 +51,10 @@ function Game({difficulty}) {
     }
     fetchWords();
   }, []);
+
+  function isValid(word) {
+    return keys.includes(word.toLowerCase());
+  }
 
   function handleKeyDown(event) {
     setErrorMessage(" ");
@@ -70,6 +76,11 @@ function Game({difficulty}) {
       setAttemptMessage(`You have ${remainingAttempts} attempts remaining!`);
       if (currCol === wordSize) {
         let input = toWord(board[currRow]);
+        if (!isValid(input)) {
+          setErrorMessage("Invalid Word");
+          return;
+        }
+        setErrorMessage(" ");
         if (compare(randomWord, input)) {
           let newBoard = [...board];
           let charIdx = 0;
@@ -121,12 +132,15 @@ function Game({difficulty}) {
         }
       }
     } else if (event.keyCode === 8) {
-      let newBoard = [...board];
-      let tempCol = currCol - 1;
-      newBoard[currRow][tempCol].char = " ";
-      setBoard(newBoard);
-      setCurrCol(tempCol);
-      return;
+      if (currCol > 0) {
+        let newBoard = [...board];
+        let tempCol = currCol - 1;
+        newBoard[currRow][tempCol].char = "";
+        setBoard(newBoard);
+        setCurrCol(tempCol);
+        return;
+      }
+      
     }
   }
 

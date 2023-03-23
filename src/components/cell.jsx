@@ -1,6 +1,6 @@
 import {React, useContext} from 'react'
-import '../style/cell.css'
-import {ColorContext} from '../game';
+import '../style/Cell.css'
+import {ColorContext} from '../Game';
 
 function Cell(props) {
   const color = useContext(ColorContext);

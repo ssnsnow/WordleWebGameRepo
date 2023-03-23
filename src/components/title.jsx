@@ -1,5 +1,5 @@
 import React from 'react'
-import '../style/title.css'
+import '../style/Title.css'
 
 function Title() {
   return (
