@@ -1,0 +1,15 @@
+.no-focus:focus {
+  outline: none;
+}
+
+.center-all {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.center-all-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
