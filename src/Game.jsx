@@ -3,8 +3,6 @@ import Title from './components/Title'
 import Board from './components/Board';
 import './style/Page.css';
 import './style/ResetButton.css';
-// import sixWordsFile from './data/six-letter-word.json';
-// import sevenWordsFile from './data/seven-letter-word.json';
 import './style/Message.css';
 import data from '../src/data/valid-english-word.json';
 
@@ -43,7 +41,9 @@ function Game({difficulty}) {
 
   useEffect(() => {
     async function fetchWords() {
-      const response = await fetch(fileName);
+      const response = await fetch(fileName, {headers: {
+        "Content-Type": "application/json",
+      },});
       const words = await response.json();
       const randomIndex = Math.floor(Math.random() * words.length);
       const randomWord = words[randomIndex];
