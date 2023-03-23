@@ -5,7 +5,7 @@ import './style/Page.css';
 import './style/ResetButton.css';
 import sixWordsFile from './data/six-letter-word.json';
 import sevenWordsFile from './data/seven-letter-word.json';
-import './style/message.css';
+import './style/Message.css';
 import data from './data/valid-english-word.json';
 
 export const ColorContext = createContext(null);
