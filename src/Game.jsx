@@ -39,28 +39,71 @@ function Game({difficulty}) {
     myRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    async function fetchWords() {
-      try {
-        const response = await fetch(fileName, {headers: {
-          "Content-Type": "application/json",
-        }});
-        console.log(response);
-        const words = await response.json();
-        console.log("50 words: %o", words);
-       
-        const randomIndex = Math.floor(Math.random() * words.length);
-        console.log("53 randomIdx:",randomIndex);
-        
-        const randomWord = words[randomIndex];
-        console.log("56 randomWord:",randomWord);
-        setRandomWord(randomWord.toUpperCase());
-      } catch(error) {
-        console.error(error);
+  const fetchWords = () => {
+      fetch(fileName, {headers: {
+        'Content-Type': 'application/json',
+      }}
+    )
+    .then(
+      response => {
+        console.log(response)
+        if (response.status == 200) {
+          const words = response.json();
+          console.log("words: %o", words);
+          words.then(data => {
+            const randomIndex = Math.floor(Math.random() * data.length);
+            const randomWord = data[randomIndex];
+            setRandomWord(randomWord.toUpperCase());
+          })
+        } else {
+          console.log("error")
+        }
       }
-    }
-    fetchWords();
-  }, []);
+    )
+  }
+
+  useEffect(()=>{
+    fetchWords()},[]
+  )
+
+  //   fetchWords.then(response => {
+  //       if (response == 200) {
+  //         const words = response.json();
+  //         console.log("words: %o", words);
+  //         words.then(data => {
+  //           const randomIndex = Math.floor(Math.random() * data.length);
+  //           const randomWord = data[randomIndex];
+  //           setRandomWord(randomWord.toUpperCase());
+  //         })
+  //       } else {
+  //         console.log("error")
+  //       }
+  //     }
+  // )
+
+
+
+
+  // useEffect(() => {
+  //   async function fetchWords() {
+  //     try {
+  //       const response = await fetch(fileName);
+  //       console.log(response);
+  //       const words = await response.json();
+  //       console.log("50 words: %o", words);
+       
+  //       const randomIndex = Math.floor(Math.random() * words.length);
+  //       console.log("53 randomIdx:",randomIndex);
+        
+  //       const randomWord = words[randomIndex];
+  //       console.log("56 randomWord:",randomWord);
+  //       setRandomWord(randomWord.toUpperCase());
+  //     } catch(error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   fetchWords();
+  // }, []);
 
   function isValid(word) {
     return keys.includes(word.toLowerCase());
