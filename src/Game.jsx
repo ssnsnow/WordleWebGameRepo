@@ -5,6 +5,8 @@ import './style/Page.css';
 import './style/ResetButton.css';
 import './style/Message.css';
 import data from '../src/data/valid-english-word.json';
+import {words6} from '../src/data/six-letter-word';
+import {words7} from '../src/data/seven-letter-word';
 
 export const ColorContext = createContext(null);
 
@@ -13,14 +15,17 @@ function Game({difficulty}) {
   let attempts;
   let wordSize;
   let fileName;
+  let wordFileName;
 
   if (difficulty === "normal") {
     attempts = 6;
     wordSize = 6;
+    wordFileName = words6;
     fileName = '../src/data/six-letter-word.json'
   } else {
     attempts = 5;
     wordSize = 7;
+    wordFileName = words7;
     fileName = '../src/data/seven-letter-word.json'
   }
   
@@ -30,7 +35,7 @@ function Game({difficulty}) {
   const [attemptMessage, setAttemptMessage] = useState(`You have ${attempts} attempts remaining!`);
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
-  const [randomWord, setRandomWord] = useState('');
+  // const [randomWord, setRandomWord] = useState('');
   const keys = Object.keys(data);
 
   const myRef = useRef(null);
@@ -39,32 +44,37 @@ function Game({difficulty}) {
     myRef.current.focus();
   }, []);
 
-  const fetchWords = () => {
-      fetch(fileName, {headers: {
-        'Content-Type': 'application/json',
-      }}
-    )
-    .then(
-      response => {
-        console.log(response)
-        if (response.status == 200) {
-          const words = response.json();
-          console.log("words: %o", words);
-          words.then(data => {
-            const randomIndex = Math.floor(Math.random() * data.length);
-            const randomWord = data[randomIndex];
-            setRandomWord(randomWord.toUpperCase());
-          })
-        } else {
-          console.log("error")
-        }
-      }
-    )
-  }
+  const randomIndex = Math.floor(Math.random() * wordFileName.length);
+  const randomWord = wordFileName[randomIndex];
 
-  useEffect(()=>{
-    fetchWords()},[]
-  )
+  // setRandomWord(randomWord.toUpperCase());
+
+  // const fetchWords = () => {
+  //     fetch(fileName, {headers: {
+  //       'Content-Type': 'application/json',
+  //     }}
+  //   )
+  //   .then(
+  //     response => {
+  //       console.log(response)
+  //       if (response.status == 200) {
+  //         const words = response.json();
+  //         console.log("words: %o", words);
+  //         words.then(data => {
+  //           const randomIndex = Math.floor(Math.random() * data.length);
+  //           const randomWord = data[randomIndex];
+  //           setRandomWord(randomWord.toUpperCase());
+  //         })
+  //       } else {
+  //         console.log("error")
+  //       }
+  //     }
+  //   )
+  // }
+
+  // useEffect(()=>{
+  //   fetchWords()},[]
+  // )
 
   //   fetchWords.then(response => {
   //       if (response == 200) {

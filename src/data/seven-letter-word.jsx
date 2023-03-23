@@ -1,4 +1,4 @@
-[
+export const words7 = [
   "ability",
   "account",
   "airline",
@@ -47,4 +47,4 @@
   "tension",
   "terrier",
   "trouble",
-  "weather"]
+  "weather"];
