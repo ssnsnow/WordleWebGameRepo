@@ -30,7 +30,6 @@ function Game({difficulty}) {
   } else {
     attempts = 5;
     wordSize = 7;
-    wordFileName = words7;
     randomWord = randomWordHard;
   }
 
