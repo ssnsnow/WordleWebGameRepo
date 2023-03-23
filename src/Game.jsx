@@ -10,32 +10,36 @@ import {words7} from '../src/data/seven-letter-word';
 
 export const ColorContext = createContext(null);
 
+function getRandomWord(file) {
+  let randomIdx = Math.floor(Math.random() * file.length);
+  return file[randomIdx].toUpperCase();
+}
+const randomWordNormal = getRandomWord(words6)
+const randomWordHard = getRandomWord(words7)
+
 function Game({difficulty}) {
 
   let attempts;
   let wordSize;
-  let fileName;
-  let wordFileName;
+  let randomWord;
 
   if (difficulty === "normal") {
     attempts = 6;
     wordSize = 6;
-    wordFileName = words6;
-    fileName = '../src/data/six-letter-word.json'
+    randomWord = randomWordNormal;
   } else {
     attempts = 5;
     wordSize = 7;
     wordFileName = words7;
-    fileName = '../src/data/seven-letter-word.json'
+    randomWord = randomWordHard;
   }
-  
+
   const [board, setBoard] = useState(createBoard(attempts, wordSize));
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [attemptMessage, setAttemptMessage] = useState(`You have ${attempts} attempts remaining!`);
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
-  // const [randomWord, setRandomWord] = useState('');
   const keys = Object.keys(data);
 
   const myRef = useRef(null);
@@ -43,77 +47,6 @@ function Game({difficulty}) {
   useEffect(() => {
     myRef.current.focus();
   }, []);
-
-  const randomIndex = Math.floor(Math.random() * wordFileName.length);
-  const randomWord = wordFileName[randomIndex];
-
-  // setRandomWord(randomWord.toUpperCase());
-
-  // const fetchWords = () => {
-  //     fetch(fileName, {headers: {
-  //       'Content-Type': 'application/json',
-  //     }}
-  //   )
-  //   .then(
-  //     response => {
-  //       console.log(response)
-  //       if (response.status == 200) {
-  //         const words = response.json();
-  //         console.log("words: %o", words);
-  //         words.then(data => {
-  //           const randomIndex = Math.floor(Math.random() * data.length);
-  //           const randomWord = data[randomIndex];
-  //           setRandomWord(randomWord.toUpperCase());
-  //         })
-  //       } else {
-  //         console.log("error")
-  //       }
-  //     }
-  //   )
-  // }
-
-  // useEffect(()=>{
-  //   fetchWords()},[]
-  // )
-
-  //   fetchWords.then(response => {
-  //       if (response == 200) {
-  //         const words = response.json();
-  //         console.log("words: %o", words);
-  //         words.then(data => {
-  //           const randomIndex = Math.floor(Math.random() * data.length);
-  //           const randomWord = data[randomIndex];
-  //           setRandomWord(randomWord.toUpperCase());
-  //         })
-  //       } else {
-  //         console.log("error")
-  //       }
-  //     }
-  // )
-
-
-
-
-  // useEffect(() => {
-  //   async function fetchWords() {
-  //     try {
-  //       const response = await fetch(fileName);
-  //       console.log(response);
-  //       const words = await response.json();
-  //       console.log("50 words: %o", words);
-       
-  //       const randomIndex = Math.floor(Math.random() * words.length);
-  //       console.log("53 randomIdx:",randomIndex);
-        
-  //       const randomWord = words[randomIndex];
-  //       console.log("56 randomWord:",randomWord);
-  //       setRandomWord(randomWord.toUpperCase());
-  //     } catch(error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //   fetchWords();
-  // }, []);
 
   function isValid(word) {
     return keys.includes(word.toLowerCase());
@@ -144,9 +77,8 @@ function Game({difficulty}) {
           return;
         }
         setErrorMessage(" ");
-        console.log("94 randomword",randomWord);
+        console.log("random word", randomWord)
         if (compare(randomWord, input)) {
-          console.log("96 randomword",randomWord);
           let newBoard = [...board];
           let charIdx = 0;
           while (charIdx < wordSize) {
