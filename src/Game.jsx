@@ -42,11 +42,18 @@ function Game({difficulty}) {
   useEffect(() => {
     async function fetchWords() {
       try {
-        const response = await fetch(fileName);
+        const response = await fetch(fileName, {headers: {
+          "Content-Type": "application/json",
+        }});
         console.log(response);
         const words = await response.json();
+        console.log("50 words: %o", words);
+       
         const randomIndex = Math.floor(Math.random() * words.length);
+        console.log("53 randomIdx:",randomIndex);
+        
         const randomWord = words[randomIndex];
+        console.log("56 randomWord:",randomWord);
         setRandomWord(randomWord.toUpperCase());
       } catch(error) {
         console.error(error);
@@ -84,7 +91,9 @@ function Game({difficulty}) {
           return;
         }
         setErrorMessage(" ");
+        console.log("94 randomword",randomWord);
         if (compare(randomWord, input)) {
+          console.log("96 randomword",randomWord);
           let newBoard = [...board];
           let charIdx = 0;
           while (charIdx < wordSize) {
@@ -125,7 +134,6 @@ function Game({difficulty}) {
           }
           setBoard(newBoard);
           if (remainingAttempts === 0) {
-            console.log('randomword:', randomWord);
             setAttemptMessage(`You lose! Answer is ${randomWord}!`);
             setErrorMessage(" ");
             return;
